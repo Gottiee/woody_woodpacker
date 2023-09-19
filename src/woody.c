@@ -46,20 +46,50 @@ void print_error(char *err, char *file_name, t_data *data)
 	exit(1);
 }
 
+void choose_bits(t_data *data)
+{
+	Elf64_Ehdr *header = (Elf64_Ehdr *)data->file_data;
+
+	if (header->e_ident[EI_CLASS] == ELFCLASS32)
+		print_error("woody_woodpacker: %s: File format not supported: \'elf32 bit\'", data->file_name, data);
+	else if (header->e_ident[EI_CLASS] == ELFCLASS64)
+		//main_64(header, data);
+		printf("letsgo packe\n");
+	else
+		print_error("woody_woodpacker: %s: File format not recognized\n", data->file_name, data);
+}
+
+char *mmap_file(t_data *data)
+{
+	struct stat file_stat;
+	char *file_data;
+
+	if (fstat(data->fd, &file_stat) == -1)
+		print_perror(NULL, "fstat", data);
+	if (S_ISDIR(file_stat.st_mode))
+		print_error("woody_woodpacker: Warning: '%s' is a directory\n", data->file_name, data);
+	file_data = mmap(NULL, file_stat.st_size, PROT_READ, MAP_SHARED, data->fd, 0);
+	if (file_data == MAP_FAILED)
+		print_perror(NULL, "mmap", data);
+	data->size_mmap = file_stat.st_size;
+	return file_data;
+}
+
 void check_arg(int argc, char **argv, t_data *data)
 {
 	if (argc == 1)
 	{
 		data->file_name = "a.out";
 		if ((data->fd = open_file("a.out")) == -1)
-			print_perror(NULL, "woody", data);
-		printf("\'a.out\' loaded\n");
+			print_perror(NULL, "woody_woodpacker", data);
+		printf("\'a.out\' found\n");
 	}
 	else
 	{
 		data->file_name = argv[1];
 		if ((data->fd = open_file(argv[1])) == -1)
-			print_perror(NULL, "woody", data);
+			print_perror(NULL, "woody_woodpacker", data);
+		printf("\'%s\' found\n", data->file_name);
 	}
 }
 
@@ -77,8 +107,8 @@ int main(int argc, char **argv)
 
 	init_struct(&data);
 	check_arg(argc, argv, &data);
-	//data.file_data = mmap_file(&data);
-	//choose_bits(&data);
-	//close(data.fd);
-	//munmap(data.file_data, data.size_mmap);
+	data.file_data = mmap_file(&data);
+	choose_bits(&data);
+	close(data.fd);
+	munmap(data.file_data, data.size_mmap);
 }
