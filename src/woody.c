@@ -84,14 +84,14 @@ void check_arg(int argc, char **argv, t_data *data)
 		data->file_name = "a.out";
 		if ((data->fd = open_file("a.out")) == -1)
 			print_perror(NULL, "woody_woodpacker", data);
-		printf("FILE: \'a.out\'\n");
+		printf("\tFILE: \'a.out\'\n");
 	}
 	else
 	{
 		data->file_name = argv[1];
 		if ((data->fd = open_file(argv[1])) == -1)
 			print_perror(NULL, "woody_woodpacker", data);
-		printf("FILE: \'%s\'\n", data->file_name);
+		printf("\tFILE: \'%s\'\n", data->file_name);
 	}
 }
 

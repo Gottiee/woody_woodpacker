@@ -17,7 +17,8 @@ SAN			= -fsanitize=address
 # SOURCES
 
 SRC_FILES = 	woody \
-pack
+pack \
+insert
 
 C_FILES		=	$(addsuffix .c, $(SRC_FILES))
 SRCS		=	$(addprefix $(SRC_DIR), $(C_FILES))

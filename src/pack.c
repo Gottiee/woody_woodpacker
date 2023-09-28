@@ -22,11 +22,11 @@ void duplicated_binary(t_data *data)
 	data->file_data = mmap(NULL, data->size_mmap, PROT_WRITE | PROT_EXEC | PROT_READ, MAP_SHARED, data->fd, 0);
 	if (data->file_data == MAP_FAILED)
 		print_perror(NULL, "mmap", data);
-	printf("woody created\n\n");
+	printf("\twoody created\n\n");
 }
 
 void pack(Elf64_Ehdr *header, t_data *data)
 {
 	duplicated_binary(data);
-	(void)header;
+	insert_code(header, data);
 }

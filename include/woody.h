@@ -19,13 +19,16 @@ typedef struct s_data
 	char *file_name;
 } t_data;
 
-typedef struct s_64
+typedef struct s_exploit_data
 {
-	Elf64_Shdr	*symbol_section_header;
-	Elf64_Shdr	*string_section_header;
-	Elf64_Sym	*symbols;
 	Elf64_Ehdr	*header;
-} t_64;
+	Elf64_Phdr	*seg;
+	Elf64_Addr	init_entry_point;
+	Elf64_Addr	new_entry_point;
+	Elf64_Addr	first_seg;
+	Elf64_Addr	start_payload;
+	Elf64_Addr	end_payload;
+} t_exploit_data;
 
 /* woody.c */
 void print_error(char *err, char *file_name, t_data *data);
@@ -33,5 +36,8 @@ void print_perror(char *string, char *cmd, t_data *data);
 
 /* pack.c */
 void pack(Elf64_Ehdr *header, t_data *data);
+
+/* insert.c */
+void insert_code(Elf64_Ehdr *header, t_data *data);
 
 #endif
