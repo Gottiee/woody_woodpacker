@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <elf.h>
+#include <elf.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/mman.h>
@@ -21,10 +21,17 @@ typedef struct s_data
 
 typedef struct s_64
 {
-	//Elf64_Shdr	*symbol_section_header;
-	//Elf64_Shdr	*string_section_header;
-	//Elf64_Sym	*symbols;
-	//Elf64_Ehdr	*header;
+	Elf64_Shdr	*symbol_section_header;
+	Elf64_Shdr	*string_section_header;
+	Elf64_Sym	*symbols;
+	Elf64_Ehdr	*header;
 } t_64;
+
+/* woody.c */
+void print_error(char *err, char *file_name, t_data *data);
+void print_perror(char *string, char *cmd, t_data *data);
+
+/* pack.c */
+void pack(Elf64_Ehdr *header, t_data *data);
 
 #endif

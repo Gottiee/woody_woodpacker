@@ -17,6 +17,7 @@ SAN			= -fsanitize=address
 # SOURCES
 
 SRC_FILES = 	woody \
+pack
 
 C_FILES		=	$(addsuffix .c, $(SRC_FILES))
 SRCS		=	$(addprefix $(SRC_DIR), $(C_FILES))
@@ -57,7 +58,7 @@ clean:
 			@echo "$(BLUE)$(NAME) object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
-			@$(RM) -f $(NAME)
+			@$(RM) -f $(NAME) woody
 
 re:			fclean
 			@make --no-print-directory all
