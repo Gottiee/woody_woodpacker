@@ -18,7 +18,8 @@ SAN			= -fsanitize=address
 
 SRC_FILES = 	woody \
 pack \
-insert
+insert \
+payload
 
 C_FILES		=	$(addsuffix .c, $(SRC_FILES))
 SRCS		=	$(addprefix $(SRC_DIR), $(C_FILES))
@@ -38,13 +39,13 @@ all:		 obj $(NAME)
 
 $(NAME):	$(OBJS)
 			@$(CC) $(CFLAGS) $^ -o $@ 
-			@echo "\e[1A\e[K$(FONT_BOLD)FILES LOAD ! $(FONT_RESET)    $(COUNT)/($(COUNT))"
+			@echo "$(FONT_BOLD)FILES LOAD ! $(FONT_RESET)    $(COUNT)/($(COUNT))"
 			@echo "$(RED)$(NAME) compiled !$(DEF_COLOR)"
+			@./asm/shell_code.sh
 
 $(OBJ_DIR)%.o:	 $(SRC_DIR)%.c 
 			@$(CC) $(CFLAGS) $(ADDFLAGS) -c -o $@ $< 
 			@echo "$(BLUE)Creating object file -> $(WHITE)$(notdir $@)... $(RED)[Done]$(NOC)"
-
 
 #	BONUS
 bonus:		obj $(LIB) $(NAME_BONUS)
@@ -59,7 +60,7 @@ clean:
 			@echo "$(BLUE)$(NAME) object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
-			@$(RM) -f $(NAME) woody
+			@$(RM) -f $(NAME) woody asm/payload
 
 re:			fclean
 			@make --no-print-directory all
