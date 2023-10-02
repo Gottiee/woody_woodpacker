@@ -60,7 +60,7 @@ clean:
 			@echo "$(BLUE)$(NAME) object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
-			@$(RM) -f $(NAME) woody asm/payload
+			@$(RM) -f $(NAME) woody asm/payload asm/opcode
 
 re:			fclean
 			@make --no-print-directory all

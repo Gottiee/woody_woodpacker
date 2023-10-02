@@ -7,10 +7,15 @@ _start:
 	lea rsi,[rel msg]
 	mov rdx, msg_end - msg
 	syscall
-
-	mov rax, 0x111111
-	jmp rax
+	jmp end
 
 align 8
 	msg db "....WOODY....", 0x0a, 0
 	msg_end db 0x0
+
+end:
+	xor rax, rax
+	xor rdi, rdi
+	xor rdx, rdx
+	xor rsi, rsi
+	jmp 0xffffffff

@@ -28,6 +28,8 @@ typedef struct s_exploit_data
 	Elf64_Addr first_seg;
 	Elf64_Addr start_payload;
 	Elf64_Addr end_payload;
+	Elf64_Off text_size;
+
 } t_exploit_data;
 
 typedef struct s_payload

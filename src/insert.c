@@ -9,6 +9,7 @@ void get_base_addr(void *file_data, t_exploit_data *exploit)
 	{
 		if (seg[i].p_type == PT_LOAD)
 		{
+			printf("\t\tFirst seg base address found at 0x%ld\n", seg[i].p_vaddr);
 			exploit->first_seg = seg[i].p_vaddr;
 			break;
 		}
@@ -30,7 +31,7 @@ int check_corruption(t_exploit_data *exploit)
 void load_payload(t_payload *payload, t_data *data)
 {
 	printf("\tLoading Payload:\n");
-	int fd = open("asm/payload", O_RDONLY);
+	int fd = open("asm/opcode", O_RDONLY);
 	size_t size;
 
 	if (fd == -1)
@@ -78,6 +79,8 @@ void find_cave(t_exploit_data *exploit, t_data *data, t_payload *payload)
 					continue;
 				printf("\t\tFound cave at offset -> 0x%lx.\n", exploit->start_payload);
 				printf("\t\t0x%1$lx (%1$ld) bytes available\n", seg[i + 1].p_offset - exploit->start_payload);
+				seg->p_filesz += payload->len;
+				seg->p_memsz += payload->len;
 				return;
 			}
 		}
@@ -88,8 +91,10 @@ void find_cave(t_exploit_data *exploit, t_data *data, t_payload *payload)
 void insert_payload(t_exploit_data *exploit, t_data *data, t_payload *payload)
 {
 	update_payload(exploit, data, payload);
-	if (!(memmove(exploit->start_payload + data->file_data, payload->data, payload->len)))
+	if (!memcpy((void *)data->file_data + exploit->new_entry_point, payload->data, payload->len))
 		print_perror("Copy payload to woody: memmove", NULL, data);
+	exploit->header->e_entry = exploit->new_entry_point;
+	printf("\t\tPayload injected: new entry point at offset 0x%lx\n", exploit->new_entry_point);
 }
 
 void insert_code(Elf64_Ehdr *header, t_data *data)
