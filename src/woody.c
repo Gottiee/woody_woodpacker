@@ -78,7 +78,6 @@ void check_arg(int argc, char **argv, t_data *data)
 {
 	printf("WOODY PACKING\n\n");
 	printf("Looking for a file...\n");
-	// check si l'argv c'est pas woody
 	if (argc == 1)
 	{
 		data->file_name = "a.out";
@@ -89,6 +88,8 @@ void check_arg(int argc, char **argv, t_data *data)
 	else
 	{
 		data->file_name = argv[1];
+		if (!strncmp("woody", data->file_name, strlen("woody")))
+			print_error("%s: argv[1] can't be 'woody'\n", "woody_woodpacker", data);
 		if ((data->fd = open_file(argv[1])) == -1)
 			print_perror(NULL, "woody_woodpacker", data);
 		printf("\tFILE: \'%s\'\n", data->file_name);

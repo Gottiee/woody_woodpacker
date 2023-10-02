@@ -45,7 +45,7 @@ void inject_return_address(t_payload *payload, t_exploit_data *exploit)
 {
 	Elf64_Word jmp = exploit->init_entry_point + exploit->first_seg - (exploit->new_entry_point + payload->len);
 	*(Elf64_Word *)(payload->data + payload->len - 4) = jmp;
-	printf("\t\tModified return address: 0x%d\n", jmp);
+	printf("\t\tModified return address: jmp to 0x%1$x(%1$d)\n", jmp);
 }
 
 void update_payload(t_exploit_data *exploit, t_data *data, t_payload *payload)
@@ -54,6 +54,4 @@ void update_payload(t_exploit_data *exploit, t_data *data, t_payload *payload)
 	find_text_section(data, exploit);
 	// inject_address(payload, exploit->init_entry_point);
 	inject_return_address(payload, exploit);
-
-	// printf("Entry point = %lx first seg = 0x%lx\nJmp = %x", exploit->init_entry_point, jmp);
 }
