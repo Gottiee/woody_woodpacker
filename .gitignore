@@ -2,3 +2,5 @@ obj
 woody_woodpacker
 a.out
 woody
+asm/opcode
+asm/payload
