@@ -19,7 +19,8 @@ SAN			= -fsanitize=address
 SRC_FILES = 	woody \
 pack \
 insert \
-payload
+payload \
+encrypt
 
 C_FILES		=	$(addsuffix .c, $(SRC_FILES))
 SRCS		=	$(addprefix $(SRC_DIR), $(C_FILES))

@@ -1,6 +1,7 @@
 #ifndef WOODY_H
 #define WOODY_H
 
+#include <time.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,6 +11,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <stdbool.h>
+
+#define KEY_SIZE 35
 
 typedef struct s_data
 {
@@ -29,6 +32,7 @@ typedef struct s_exploit_data
 	Elf64_Addr start_payload;
 	Elf64_Addr end_payload;
 	Elf64_Off text_size;
+	Elf64_Off text_off;
 
 } t_exploit_data;
 
@@ -36,6 +40,8 @@ typedef struct s_payload
 {
 	char *data;
 	size_t len;
+	char key[KEY_SIZE];
+	int key_size;
 } t_payload;
 
 /* woody.c */
@@ -49,6 +55,9 @@ void pack(Elf64_Ehdr *header, t_data *data);
 void insert_code(Elf64_Ehdr *header, t_data *data);
 
 /* payload.c */
-void update_payload(t_exploit_data *exploit, t_data *data, t_payload *payload);
+void update_payload(t_exploit_data *exploit, t_payload *payload);
+
+/* encrypt.c */
+void encrypt(t_exploit_data *exploit, t_data *data, t_payload *payload);
 
 #endif

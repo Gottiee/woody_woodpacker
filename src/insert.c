@@ -45,9 +45,8 @@ void load_payload(t_payload *payload, t_data *data)
 	}
 	payload->data[size] = '\0';
 	lseek(fd, 0, SEEK_SET);
-	int ret = read(fd, payload->data, size);
+	read(fd, payload->data, size);
 	payload->len = size;
-	(void)ret;
 	printf("\t\tPayload size: %ld (%.20s[...])\n", payload->len, payload->data);
 	close(fd);
 }
@@ -90,7 +89,7 @@ void find_cave(t_exploit_data *exploit, t_data *data, t_payload *payload)
 
 void insert_payload(t_exploit_data *exploit, t_data *data, t_payload *payload)
 {
-	update_payload(exploit, data, payload);
+	update_payload(exploit, payload);
 	if (!memcpy((void *)data->file_data + exploit->new_entry_point, payload->data, payload->len))
 		print_perror("Copy payload to woody: memmove", NULL, data);
 	exploit->header->e_entry = exploit->new_entry_point;
@@ -108,6 +107,7 @@ void insert_code(Elf64_Ehdr *header, t_data *data)
 	printf("\tInitial entry point address 0x%lx\n", exploit.init_entry_point);
 	load_payload(&payload, data);
 	find_cave(&exploit, data, &payload);
+	encrypt(&exploit, data, &payload);
 	insert_payload(&exploit, data, &payload);
 	free(payload.data);
 }
