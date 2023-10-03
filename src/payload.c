@@ -48,6 +48,6 @@ void update_payload(t_exploit_data *exploit, t_payload *payload)
 	inject_address(payload, exploit->text_size);
 	printf("\t\tNew entry Point: ");
 	inject_address(payload, exploit->new_entry_point);
-	inject_key(payload);
+	// inject_key(payload);
 	inject_return_address(payload, exploit);
 }
