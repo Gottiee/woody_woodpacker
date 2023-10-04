@@ -40,7 +40,7 @@ typedef struct s_payload
 {
 	char *data;
 	size_t len;
-	char key[KEY_SIZE];
+	char key[10];
 	int key_size;
 } t_payload;
 

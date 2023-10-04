@@ -10,40 +10,45 @@ _start:
 	sub rdi, r13
 	add rdi, r11
 
-	mov r10, rdi
-	and rdi, -0x1000 ; 4096 
+	mov r10, rdi 			; save _start+0
+	and rdi, -0x1000 		; 4096  -> point to _init+0
+	neg rdi 				; calcul .init size
+	add r10, rdi 
 	neg rdi
-	add r10, rdi
-	neg rdi
-	add r12, r10
+	mov r13, r12
+	add r13, r10			; .textsize + .init (size)
 
 mprotect:
 	mov rax, 10
-	mov rsi, r12
+	mov rsi, r13
 	mov rdx, 7
-	syscall 				; mprotect(rdi, rsi, rdx) => (address .text, size of text sect, PROT RWX)
-	add rdi, r10
+	syscall 				; mprotect(rdi, rsi, rdx) => (address .inti, size of text + init, PROT RWX)
 
 XORcipher:
-							; rdi store .text address to overwrite
+	add rdi, r10            ; .init + r10 = _start (start of .text section)
 							; r12 .text size
 	lea rsi, [rel key]		; key address
-	sub rsi, 1				; ? wtf
+	sub rsi, 1
 	mov r14, 10				; size of key
 	xor r8, r8
-	xor rcx, rcx
 
 loop: 
 	cmp r8, r12
 	jge write				; r8 >= .text_size
-	; mov cl , [rdi + r8]
 	mov r9, r8
 	xor rax, rax;
 	xor rdx, rdx;
 	mov rax, r9
 	div r14
 	mov bl, [rsi + rdx]
-	xor [rdi + r8], bl
+	cmp r8, 0
+	je wtf
+	xor BYTE [rdi + r8], bl
+	inc r8
+	jmp loop
+
+wtf:
+	xor BYTE [rdi], bl
 	inc r8
 	jmp loop
 
