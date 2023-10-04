@@ -12,7 +12,7 @@
 #include <sys/stat.h>
 #include <stdbool.h>
 
-#define KEY_SIZE 35
+#define KEY_SIZE 10
 
 typedef struct s_data
 {

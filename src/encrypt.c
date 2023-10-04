@@ -41,24 +41,10 @@ void key_gen(char key[KEY_SIZE])
 
 void XORCipher(char *data, char *key, unsigned int dataLen, int keyLen)
 {
-    // for (unsigned int i = 0; i < dataLen; ++i)
-    // {
-    //     printf("0x%02hhx ", data[i]);
-    //     data[i] = data[i] ^ key[i % keyLen];
-    //     printf("0x%02hhx ", data[i]);
-
-    // }
-    // printf("\n");
-
-    char *keyk = "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk";
     for (unsigned int i = 0; i < dataLen; ++i)
     {
-        printf("0x%02hhx ", data[i]);
-        data[i] = data[i] ^ keyk[i % keyLen];
-        printf("0x%02hhx ", data[i]);
+        data[i] = data[i] ^ key[i % keyLen];
     }
-    printf("\n");
-    (void)key;
 }
 
 void encrypt(t_exploit_data *exploit, t_data *data, t_payload *payload)
@@ -67,7 +53,7 @@ void encrypt(t_exploit_data *exploit, t_data *data, t_payload *payload)
     printf("\tEncrypt Text section\n");
     find_text_section(data, exploit);
     key_gen(payload->key);
-    printf("\t\tKey generated: [%.20s...] %d bytes\n", payload->key, KEY_SIZE);
+    printf("\t\tKey generated: [%.10s] %d bytes\n", payload->key, KEY_SIZE);
     XORCipher(data->file_data + exploit->text_off, payload->key, exploit->text_size, KEY_SIZE);
     printf("\t\t.text section has been encrypted\n");
 }

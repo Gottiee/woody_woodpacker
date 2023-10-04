@@ -28,22 +28,22 @@ XORcipher:
 							; rdi store .text address to overwrite
 							; r12 .text size
 	lea rsi, [rel key]		; key address
-	mov r14, 35				; size of key
+	sub rsi, 1				; ? wtf
+	mov r14, 10				; size of key
 	xor r8, r8
 	xor rcx, rcx
 
 loop: 
 	cmp r8, r12
 	jge write				; r8 >= .text_size
-	mov cl , [rdi + r8]
+	; mov cl , [rdi + r8]
 	mov r9, r8
 	xor rax, rax;
 	xor rdx, rdx;
 	mov rax, r9
 	div r14
 	mov bl, [rsi + rdx]
-	xor cl, bl
-	mov [rdi + r8], cl
+	xor [rdi + r8], bl
 	inc r8
 	jmp loop
 
@@ -58,7 +58,7 @@ write:
 align 8
 	msg db "....WOODY....", 0x0a, 0
 	msg_end db 0x0
-	key db "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk", 0
+	key db "kkkkkkkkkk", 0
 
 end:
 	xor rax, rax
